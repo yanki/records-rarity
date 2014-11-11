@@ -1,0 +1,11 @@
+FormEncode==1.2.6
+MySQL-python==1.2.5
+SQLObject==1.6.0
+bottle==0.12.7
+google-api-python-client==1.2
+httplib2==0.9
+jsonschema==2.4.0
+pytz==2014.7
+simplejson==3.6.4
+wsgiref==0.1.2
+gunicorn==19.1.1
