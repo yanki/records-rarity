@@ -54,7 +54,9 @@
 	<div class="container" id="maincontainer">
 		<hr />
 		<table>
-			
+			% for vinyl in vinyls:
+				<tr>{{vinyl}}</tr></br>
+			% end
 		</table>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>

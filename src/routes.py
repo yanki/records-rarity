@@ -11,5 +11,9 @@ from util.settings import *
 
 @route('/', method='GET')
 def index_page():
-    return template('index.tpl')
+    doc = open('vinyls.txt')
+    text = doc.read()
+    vinyls = text.split('|')
+
+    return template('index.tpl', vinyls=vinyls)
 
