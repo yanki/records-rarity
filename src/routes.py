@@ -10,6 +10,7 @@ from bottle import route, request, response, hook, \
     HTTPError, HTTPResponse, template, redirect, error
 # from apiclient.discovery import build
 from util.settings import *
+from util.models import *
 
 
 consumer_key = CONSUMER_KEY
@@ -60,14 +61,29 @@ def finish_authenticate():
     token = auth.Token(key=access_token['oauth_token'],
             secret=access_token['oauth_token_secret'])
     client = auth.Client(consumer, token)
-    doc = open('vinyls.txt')
-    text = doc.read()
-    vinyls = text.split('|')
-    resp, content = client.request('https://api.discogs.com/database/search?release_title=' + vinyls[0] + '&artist=' + vinyls[1] + '&format=vinyl',
+    with open('vinyls.txt') as f:
+        for index, line in enumerate(f):
+            line = line.rstrip()
+            vinyl = line.split('|')
+            if index is 0:
+                break
+    resp, content = client.request('https://api.discogs.com/database/search?release_title=' + vinyl[0] + '&artist=' + vinyl[1] + '&format=vinyl',
             headers={'User-Agent': user_agent})
-    # resp, content = client.request('https://api.discogs.com/database/search?title=Nirvana%20-%20Nevermind&format=vinyl',
-    #         headers={'User-Agent': user_agent})
-    # vinyls.append(access_token['oauth_token'])
-    # vinyls.append(access_token['oauth_token_secret'])
+    content = json.loads(content)
+    content = content['results'][0]
+    artist = vinyl[1]
+    tracklist = None
+    if not isinstance(content['genre'], basestring):
+        genre = str(content['genre'][0])
+    else:
+        genre = str(content['genre'])
+        # genre = str(type(content['genre']))
+    album = str(content['title'])
+    rarity = 0.0
+    art = str(content['thumb'])
+    year = str(content['year'])
+    items = [artist, tracklist, genre, album, rarity, art, year]
+    InsertRecord(artist=items[0], tracklist=items[1], genre=items[2],
+                album=items[3], rarity=items[4], art=items[5], year=items[6])
 
-    return template('index.tpl', vinyls=content)
+    return template('index.tpl', vinyls=items)
