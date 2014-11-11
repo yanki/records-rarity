@@ -1,0 +1,10 @@
+Find Rarest User Collection
+Generate Rarit for each user
+Get Genres - return all artists by genre
+Get Sellable
+Get  Tradable
+Get Album/Artist from artist/album name
+Find Wishlist that contain this user's owned vinyl
+Generate most wanted vinyl
+Generate most collected vinyl
+Find Most Expensive Vinyl
