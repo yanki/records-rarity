@@ -1,5 +1,6 @@
 import os
 import json
+import MySQLdb
 import sys
 import csv
 import io
@@ -87,3 +88,31 @@ def finish_authenticate():
                 album=items[3], rarity=items[4], art=items[5], year=items[6])
 
     return template('index.tpl', vinyls=items)
+
+@route('/insertuser', method = 'POST')
+def insert_user():	
+    username = request.forms.get('user')
+    password = request.forms.get('pass')
+	Name = request.forms.get('Name')
+	Pict = request.forms.get('PictureURL')
+	email = request.forms.get('email')
+	zipc = request.forms.get('zip')
+	city = request.forms.get('city')
+	state = request.forms.get('state')
+	street = request.forms.get('street')
+	rarity = 0
+	#open connection
+	connection = MySQLdb.connect (host = "localhost", port = 8082, user = "root", passwd = "9apple", db = "miyanki_records")
+	#prepare a cursor object
+	cursor = connection.cursor ()
+	#form query
+	#INSERT INTO table_name VALUES (value1,value2,value3,...);
+	query = "INSERT INTO users VALUES (" + username + "," + password + "," + Name + "," + Pict + "," + email + "," + zipc + "," + city + "," + state + "," + street + "," + str(rarity) + ");"
+	#execute SQL query using execute()
+	cursor.execute (query)
+	#close cursor object
+	cursor.close ()
+	#close the connection	
+	connection.close()
+
+
