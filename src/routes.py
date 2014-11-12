@@ -107,7 +107,7 @@ def insert_user():
 	cursor = connection.cursor ()
 	#form query
 	#INSERT INTO table_name VALUES (value1,value2,value3,...);
-	query = "INSERT INTO users VALUES (" + username + "," + password + "," + Name + "," + Pict + "," + email + "," + zipc + "," + city + "," + state + "," + street + "," + str(rarity) + ");"
+	query = "INSERT INTO users VALUES ('" + username + "','" + password + "','" + Name + "','" + Pict + "','" + email + "'," + zipc + ",'" + city + "','" + state + "','" + street + "'," + str(rarity) + ");"
 	#execute SQL query using execute()
 	cursor.execute (query)
 	#close cursor object
