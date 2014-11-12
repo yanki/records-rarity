@@ -25,3 +25,6 @@ SELECT records.album, users.name, owned_vinyl.sellable, owned_vinyl.tradable FRO
 
 Find all albums on all wishlists:
 SELECT album, artist, wishlist.username from records, wishlist, belongs_to_wishlist where wishlist.title=belongs_to_wishlist.title AND belongs_to_wishlist.v_id=records.v_id;
+
+Gets all owned_vinyls:
+SELECT album, artist, owned_vinyl.username FROM records, owned_vinyl, described_by where owned_vinyl.o_id=described_by.o_id and described_by.v_id=records.v_id;
