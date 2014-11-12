@@ -54,12 +54,10 @@
 	<div class="container" id="maincontainer">
 		<hr />
 		<table>
-			<!--
-			% for vinyl in vinyls:
-				<tr>{{vinyl}}</tr></br>
+			<button><a href="/records/newuser">Register</a></button></br>
+			% if iterate is "yes":
+				<tr>{{vinyls}}</tr>
 			% end
-			-->
-			<tr>{{vinyls}}</tr>
 		</table>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>

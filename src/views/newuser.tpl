@@ -54,33 +54,39 @@
 	<div class="container" id="maincontainer">
 		<hr />
 		<table>
-			<form action="">
-				UserName:<br>
-				<input type = "text" name="user">
-				<br>
-				Password:<br>
-				<input type = "text" name="pass">
-				<br>
-				E-Mail:<br>
-				<input type = "text" name="email">
-				<br>
-				Zipcode:<br>
-				<input type = "text" name="zip">
-				<br>
-				Street:<br>
-				<input type = "text" name="street">
-				<br>
-				City:<br>
-				<input type = "text" name="city">
-				<br>
-				State:<br>
-				<input type = "text" name="state">
-				<br>
+			% if made is "yes":
+				<tr>New User Created!</tr>
+			% end
+			<form action="/records/insertuser" method="post">
+				<div class="form-group">
+					<label>Full Name:</label>
+					<input type = "text" class="form-control" id="name" name="name">
+					<br>
+					<label>UserName:</label>
+					<input type = "text" class="form-control" id="username" name="username">
+					<br>
+					<label>Password:</label>
+					<input type = "text" class="form-control" id="password" name="password">
+					<br>
+					<label>E-Mail:</label>
+					<input type = "text" class="form-control" id="email" name="email">
+					<br>
+					<label>Zipcode:</label>
+					<input type = "text" class="form-control" id="zip" name="zip">
+					<br>
+					<label>Street:</label>
+					<input type = "text" class="form-control" id="street" name="street">
+					<br>
+					<label>City:</label>
+					<input type = "text" class="form-control" id="city" name="city">
+					<br>
+					<label>State:</label>
+					<input type = "text" class="form-control" id="state" name="state">
+					<br>
+					<button type="submit" class="btn">Submit</button>
+				</div>
 			</form>
-			<br>
-			<button type="button">
-				Create User
-			</button>	
+			<br>	
 			
 		</table>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
