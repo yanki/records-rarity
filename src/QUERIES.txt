@@ -1,24 +1,27 @@
-Find Rarest User Collection:
-
-SELECT MAX(rarity) FROM users:
-
-Generate rarity for each user
-
-SELECT AVG(rarity) FROM records WHERE( SELECT o_id FROM owned_vinyl = SELECT v_id FROM users);
 
 Get genres - return all artists by genre:
-
 SELECT * FROM records WHERE (genre = '');
 
 Get Sellable: 
-
 SELECT * FROM owned_vinyl WHERE (sellable = 1);
 
 Get Tradable: 
-
 SELECT * FROM owned_vinyl WHERE (tradable = 1);
 
 Get Album/Artist:
-
 SELECT * FROM records WHERE (artist = '' AND album = '');
 
+Get most expensive vinyl: 
+SELECT records.album, max(owned_vinyl.price) from owned_vinyl, records, described_by where owned_vinyl.o_id=described_by.o_id and described_by.v_id=records.v_id;
+
+Get album names from users wishilists: 
+SELECT records.album FROM records, belongs_to_wishlist where belongs_to_wishlist.username='myankou' and belongs_to_wishlist.v_id=records.v_id;
+
+Find who owns which albums on your wishlist:
+SELECT users.name, records.album FROM users, records, owned_vinyl, described_by, belongs_to_wishlist WHERE belongs_to_wishlist.v_id=records.v_id AND belongs_to_wishlist.v_id=described_by.v_id AND owned_vinyl.o_id=described_by.o_id AND belongs_to_wishlist.username='myankou' AND owned_vinyl.sellable='1';
+
+Find sellable/tradable albums from other users owned_vinyl:
+SELECT records.album, users.name, owned_vinyl.sellable, owned_vinyl.tradable FROM records, users, described_by, wishlist, owned_vinyl, belongs_to_wishlist WHERE wishlist.title='Something Something Darkside' AND wishlist.title=belongs_to_wishlist.title AND belongs_to_wishlist.v_id=records.v_id AND records.v_id=described_by.v_id AND described_by.o_id=owned_vinyl.o_id AND owned_vinyl.username=users.username AND owned_vinyl.username!=wishlist.username AND (owned_vinyl.tradable='1' OR owned_vinyl.sellable='1');
+
+Find all albums on all wishlists:
+SELECT album, artist, wishlist.username from records, wishlist, belongs_to_wishlist where wishlist.title=belongs_to_wishlist.title AND belongs_to_wishlist.v_id=records.v_id;
