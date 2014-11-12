@@ -82,7 +82,7 @@ RELATIONS['wishlist'] = (
     "ALTER TABLE `wishlist`"
     "ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE NO ACTION;")
 
-cnx = connector.connect(user='root', password='####')
+cnx = connector.connect(user='root', password='yanmik1023')
 cursor = cnx.cursor()
 
 
