@@ -1,0 +1,24 @@
+Find Rarest User Collection:
+
+SELECT MAX(rarity) FROM users:
+
+Generate rarity for each user
+
+SELECT AVG(rarity) FROM records WHERE( SELECT o_id FROM owned_vinyl = SELECT v_id FROM users);
+
+Get genres - return all artists by genre:
+
+SELECT * FROM records WHERE (genre = '');
+
+Get Sellable: 
+
+SELECT * FROM owned_vinyl WHERE (sellable = 1);
+
+Get Tradable: 
+
+SELECT * FROM owned_vinyl WHERE (tradable = 1);
+
+Get Album/Artist:
+
+SELECT * FROM records WHERE (artist = '' AND album = '');
+
