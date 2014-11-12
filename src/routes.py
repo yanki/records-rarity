@@ -107,3 +107,14 @@ def insert_user():
     InsertUser(name=name, username=username, password=password, picture=pict,
         email=email, zipcode=zipc, city=city, state=state, street=street, rarity=rarity)
     return template('newuser.tpl', made="yes")
+
+@route('/newwishlist', method='GET')
+def new_wishlist():
+    return template('newwishlist.tpl', made="no")
+
+@route('/insertwishlist', method='POST')
+def insert_wishlist():
+    username = request.forms.get('username')
+    wishlist = request.forms.get('wishlist')
+    InsertWishlist(username=username, wishlist=wishlist)
+    return template('newwishlist.tpl', made="yes")

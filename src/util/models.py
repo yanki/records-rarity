@@ -1,5 +1,4 @@
 import mysql.connector
-from mysql.connector import errorcode
 from settings import *
 
 
@@ -27,6 +26,19 @@ def InsertUser(**args):
     data_user = (args['username'], args['password'], args['name'],
                 args['picture'], args['email'], args['zipcode'], args['city'], args['state'], args['street'], args['rarity'])
     cursor.execute(add_user, data_user)
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+
+def InsertWishlist(**args):
+    cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
+            host=DATABASE_LOCATION, database=DATABASE_NAME)
+    cursor = cnx.cursor()
+    add_wish = ("INSERT INTO wishlist "
+                "(title, username) "
+                "VALUES (%s, %s)")
+    data_wish = (args['wishlist'], args['username'])
+    cursor.execute(add_wish, data_wish)
     cnx.commit()
     cursor.close()
     cnx.close()
