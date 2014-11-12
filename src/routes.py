@@ -1,4 +1,5 @@
 import json
+import MySQLdb
 import sys
 import urlparse
 import oauth2 as auth
@@ -80,6 +81,7 @@ def finish_authenticate():
         for index, line in enumerate(f):
             line = line.rstrip()
             vinyl = line.split('|')
+<<<<<<< HEAD
             resp, content = client.request('https://api.discogs.com/database/search?release_title=' + vinyl[0] + '&artist=' + vinyl[1] + '&format=vinyl',
                             headers={'User-Agent': user_agent})
             content = json.loads(content)
@@ -109,3 +111,55 @@ def finish_authenticate():
             else:
                 continue
     return template('index.tpl', vinyls=None)
+=======
+            if index is 0:
+                break
+    resp, content = client.request('https://api.discogs.com/database/search?release_title=' + vinyl[0] + '&artist=' + vinyl[1] + '&format=vinyl',
+            headers={'User-Agent': user_agent})
+    content = json.loads(content)
+    content = content['results'][0]
+    artist = vinyl[1]
+    tracklist = None
+    if not isinstance(content['genre'], basestring):
+        genre = str(content['genre'][0])
+    else:
+        genre = str(content['genre'])
+        # genre = str(type(content['genre']))
+    album = str(content['title'])
+    rarity = 0.0
+    art = str(content['thumb'])
+    year = str(content['year'])
+    items = [artist, tracklist, genre, album, rarity, art, year]
+    InsertRecord(artist=items[0], tracklist=items[1], genre=items[2],
+                album=items[3], rarity=items[4], art=items[5], year=items[6])
+
+    return template('index.tpl', vinyls=items)
+
+@route('/insertuser', method = 'POST')
+def insert_user():	
+    username = request.forms.get('user')
+    password = request.forms.get('pass')
+	Name = request.forms.get('Name')
+	Pict = request.forms.get('PictureURL')
+	email = request.forms.get('email')
+	zipc = request.forms.get('zip')
+	city = request.forms.get('city')
+	state = request.forms.get('state')
+	street = request.forms.get('street')
+	rarity = 0
+	#open connection
+	connection = MySQLdb.connect (host = "localhost", port = 8082, user = "root", passwd = "9apple", db = "miyanki_records")
+	#prepare a cursor object
+	cursor = connection.cursor ()
+	#form query
+	#INSERT INTO table_name VALUES (value1,value2,value3,...);
+	query = "INSERT INTO users VALUES ('" + username + "','" + password + "','" + Name + "','" + Pict + "','" + email + "'," + zipc + ",'" + city + "','" + state + "','" + street + "'," + str(rarity) + ");"
+	#execute SQL query using execute()
+	cursor.execute (query)
+	#close cursor object
+	cursor.close ()
+	#close the connection	
+	connection.close()
+
+
+>>>>>>> b9a1e6db2b497dd77d5d523739ae7d1ce8488442
