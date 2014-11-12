@@ -1,9 +1,7 @@
 import json
-import MySQLdb
 import sys
 import urlparse
 import oauth2 as auth
-# import ss1
 from bottle import route, request, response, hook, \
     HTTPError, HTTPResponse, template, redirect, error
 # from apiclient.discovery import build
@@ -11,17 +9,6 @@ from util.settings import *
 from util.models import *
 # from requests.adapters import HTTPAdapter
 # from requests.packages.urllib3.poolmanager import PoolManager
-
-# import ssl
-# from functools import wraps
-# def sslwrap(func):
-#     @wraps(func)
-#     def bar(*args, **kw):
-#         kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-#         return func(*args, **kw)
-#     return bar
-
-# ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 
 consumer_key = CONSUMER_KEY
 consumer_secret = CONSUMER_SECRET
@@ -34,20 +21,10 @@ global consumer
 
 user_agent = 'records-rarity/1.0'
 
-# class MyAdapter(HTTPAdapter):
-#     def init_poolmanager(self, connections, maxsize, block=False):
-#         self.poolmanager = PoolManager(num_pools=connections,
-#                                         maxsize=maxsize,
-#                                         block=block,
-#                                         ss1_version=ss1.PROTOCOL_TLSv1)
 
 @route('/', method='GET')
 def index_page():
-    doc = open('vinyls.txt')
-    text = doc.read()
-    vinyls = text.split('|')
-
-    return template('index.tpl', vinyls=vinyls)
+    return template('index.tpl', iterate="no", vinyls="WHAT")
 
 @route('/token')
 def get_token():
@@ -109,7 +86,7 @@ def finish_authenticate():
                     break
             else:
                 continue
-    return template('index.tpl', vinyls=None)
+    return template('index.tpl', vinyls=None, iterate="yes")
 
 @route('/newuser', method='GET')
 def new_user():
