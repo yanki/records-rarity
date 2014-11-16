@@ -1,15 +1,15 @@
 
 Get genres - return all artists by genre:
-SELECT * FROM records WHERE (genre = '');
+SELECT * FROM records WHERE (genre = 'Rock\n');
 
 Get Sellable: 
-SELECT * FROM owned_vinyl WHERE (sellable = 1);
+SELECT * FROM owned_vinyl WHERE (sellable = '1');
 
 Get Tradable: 
-SELECT * FROM owned_vinyl WHERE (tradable = 1);
+SELECT * FROM owned_vinyl WHERE (tradable = '1');
 
 Get Album/Artist:
-SELECT * FROM records WHERE (artist = '' AND album = '');
+select * from records where artist='The Beach Boys' and album='Pet Sounds';
 
 Get most expensive vinyl: 
 SELECT records.album, max(owned_vinyl.price) from owned_vinyl, records, described_by where owned_vinyl.o_id=described_by.o_id and described_by.v_id=records.v_id;
