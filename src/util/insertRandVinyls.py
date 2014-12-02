@@ -53,7 +53,7 @@ nouns = ['access','ache','act','address','aim','alert','answer','arrest','attack
 'tug','turn','twist','upstage','use','vacuum','value','visit','voice','vote','walk','waltz','wake','watch','water','wave',\
 'wear','whip','whisper','whistle','wick','wink','wire','wish','work','wrap','wreck','yawn','zone']
 genres = ['Rock','Rap','Hip Hop','Alternative','Classical','Power Violence','Indie',\
-'Electronic','Metal','World Music','Jazz','Blues','Pop','Reggae','Punk','R&B','County','Holiday']
+'Electronic','Metal','World Music','Jazz','Blues','Pop','Reggae','Punk','R&B','Country','Holiday']
 
 adjective_len = len(adjectives)-1
 noun_len = len(nouns)-1
