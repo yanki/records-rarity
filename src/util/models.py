@@ -57,7 +57,6 @@ def InsertWishlist(**args):
     cursor.close()
     cnx.close()
 
-<<<<<<< HEAD
 def getUser(**args):
     cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
             host=DATABASE_LOCATION, database=DATABASE_NAME)
@@ -201,27 +200,17 @@ def AddRecord(**args):
     cursor.close()
     cnx.close()
     return True
-=======
-def SearchRecords(**args):
+
+def AddWish(**args):
     cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
             host=DATABASE_LOCATION, database=DATABASE_NAME)
     cursor = cnx.cursor()
-
-    search_string = args['search_field'] #change to whatever the form is
-    search_result = set()
-
-    for s in search_string.split():
-        query = "SELECT DISTINCT artist,album,genre,year FROM records WHERE\
- artist LIKE '%" + s + "%' OR album LIKE '%" + s + "%'"
-        cursor.execute(query)
-        data = cursor.fetchall()
-        for d in data:
-            search_result.add(d) 
-
-    #do something with search_result
-
+    query = "INSERT INTO belongs_to_wishlist (v_id, username, title) VALUES(%s, '%s', '%s');" % (args['v_id'], args['username'], args['title'])
+    cursor.execute(query)
+    cnx.commit()
     cursor.close()
     cnx.close()
+    return True
 
 def GenerateRarity(**args):
     cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
@@ -231,12 +220,9 @@ def GenerateRarity(**args):
     query = "SELECT AVG(records.rarity) FROM records,owned_vinyl,described_by WHERE owned_vinyl.username = '%s' AND owned_vinyl.o_id = described_by.o_id AND records.v_id = described_by.v_id;" % (args['username'])
     cursor.execute(query)
     avg = cursor.fetchall()[0][0]
-    
-    update = "UPDATE users SET rarity = %s WHERE username = '%s';" % (avg, args['username'])
+    update = "UPDATE users SET rarity = %s WHERE username = '%s';" % ("{0:.1f}".format(avg), args['username'])
     cursor.execute(update)
     cnx.commit()
 
     cursor.close()
     cnx.close()
-
->>>>>>> e0d3a4d605dcfef4a56ce2143761faed1d31aced

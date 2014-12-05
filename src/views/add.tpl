@@ -89,6 +89,19 @@
 				</div>
 			</form>
 		% end
+		% if type is "wish":
+			% for list in wishlists:
+				<form action="/records/ownwish" method="post">
+					<div class="form-group">
+						<input class="form-control" type="hidden" name="wishlist" id="wishlist" value="{{list[0][0]}}">
+						<input class="form-control" type="hidden" name="v_id" id="v_id" value="{{v_id}}">
+						<input class="form-control" type="hidden" name="type" id="type" value="add">
+						<button type="submit" class="btn btn-info">{{list[0][0]}}</button>
+					</div>
+				</form>
+				<br>
+			% end
+		% end
 		<br>	
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

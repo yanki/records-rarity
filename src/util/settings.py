@@ -4,14 +4,14 @@
 #
 # Application constants
 #
-DATABASE_LOCATION = 'localhost'
-DATABASE_NAME = 'miyanki_records'
-DATABASE_USER = 'root'
-DATABASE_PASS = 'yanmik1023'
-# DATABASE_LOCATION = '50.87.47.221'
+# DATABASE_LOCATION = 'localhost'
 # DATABASE_NAME = 'miyanki_records'
-# DATABASE_USER = 'miyanki_root'
-# DATABASE_PASS = 'oI!3k]qoJmV*'
+# DATABASE_USER = 'root'
+# DATABASE_PASS = 'yanmik1023'
+DATABASE_LOCATION = '50.87.47.221'
+DATABASE_NAME = 'miyanki_records'
+DATABASE_USER = 'miyanki_root'
+DATABASE_PASS = 'oI!3k]qoJmV*'
 
 CONSUMER_KEY = 'UwXxcQmrxaOKVmMdzAor'
 CONSUMER_SECRET = 'ALdkAeTRcdopeKSgeXklSCgbYGKHjBLO'

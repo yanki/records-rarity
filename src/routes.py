@@ -153,6 +153,7 @@ def login():
 
     username = request.forms.get('username')
     password = request.forms.get('password')
+    GenerateRarity(username=username)
     details = getUser(username=username, password=password)
     if details is False:
         return template('index.tpl', error="yes")
@@ -262,7 +263,6 @@ def search():
 def addRecord():
     global user_details
     global search_items
-    print search_items
     kind = request.forms.get('type')
     v_id = request.forms.get('v_id')
     if kind == "details":
@@ -273,5 +273,20 @@ def addRecord():
         trade = request.forms.get('trade')
         sell = request.forms.get('sell')
         AddRecord(username=user_details['username'], v_id=v_id, quality=quality, price=price, trade=trade, sell=sell)
+        results = SearchResults(items=search_items)
+        return template('homepage.tpl', details=user_details, contents=[results, "Search results for " + ' '.join(search_items), None], type="search")
+
+@route('/ownwish', method="POST")
+def addWish():
+    global user_details
+    global search_items
+    kind = request.forms.get('type')
+    v_id = request.forms.get('v_id')
+    if kind == "details":
+        wishlists = getWishlists(username=user_details['username'])
+        return template('add.tpl', type="wish", v_id=v_id, wishlists=wishlists)
+    elif kind == "add":
+        title = request.forms.get('wishlist')
+        AddWish(username=user_details['username'], v_id=v_id, title=title)
         results = SearchResults(items=search_items)
         return template('homepage.tpl', details=user_details, contents=[results, "Search results for " + ' '.join(search_items), None], type="search")

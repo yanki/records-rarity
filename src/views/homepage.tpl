@@ -233,6 +233,7 @@
                             <th>Year</th>
                             <th>Rarity</th>
                             <th>Ownership</th>
+                            <th>Wish</th>
                         </thead>
                         <tbody>
                             % for index, item in enumerate(contents[0]):
@@ -248,6 +249,13 @@
                                             <input class="form-control" type="hidden" name="v_id" id="v_id" value="{{item[0]}}">
                                             <input class="form-control" type="hidden" name="type" id="type" value="details">
                                             <button type="submit" class="btn btn-success">Own</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form role="form" action="/records/ownwish" method="post">
+                                            <input class="form-control" type="hidden" name="v_id" id="v_id" value="{{item[0]}}">
+                                            <input class="form-control" type="hidden" name="type" id="type" value="details">
+                                            <button type="submit" class="btn btn-info">Ask</button>
                                         </form>
                                     </td>
                                 </tr>
