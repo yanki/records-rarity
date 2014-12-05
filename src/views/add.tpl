@@ -9,12 +9,13 @@
     <title>Records Rarity</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mystyler.css" rel="stylesheet">
+    <link href="signin.css" rel="stylesheet">
     <style type="text/css">
 
     </style>
 </head>
 
-<body>
+<body bgcolor=096AA2>
 <!-- -->
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -50,55 +51,49 @@
 			</table>
 		</div>
 	</div>
-	<div class="container login_cont" id="maincontainer">
-		</br>
-		<div class="text-center">
-			% if error is "yes":
-				<div class="alert alert-danger" role="alert">
-				Wrong Username/Password Combination!
-				</div>
+	<div class="container" id="maincontainer">
+		<hr />
+		<ol class="breadcrumb">
+			<li><a href="/records/login">Home</a></li>
+			% if type is "own":
+				<li>Own Record</li>
 			% end
-			% if error is "success":
-				<div class="alert alert-success" role="alert">
-				User Created!
+		</ol>
+		% if type is "own":
+			<form action="/records/ownrecord" method="post">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-3">
+							<label>Quality:</label>
+							<input type = "text" class="form-control" id="quality" name="quality" required>
+						</div>
+						<div class="col-md-3">
+							<label>Price:</label>
+							<input type = "number" step="any" class="form-control" id="price" name="price" value="0.0" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<label>Tradability:</label>
+							<input type="checkbox" name="trade" id="trade">
+						</div>
+						<div class="col-md-3">
+							<label>Sellable:</label>
+							<input type="checkbox" name="sell" id="sell">
+						</div>
+					</div>
+					<br>
+					<input class="form-control" type="hidden" name="v_id" id="v_id" value="{{v_id}}">
+					<input class="form-control" type="hidden" name="type" id="type" value="add">
+					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
-			% end
-			<div class="row">
-				<form role="form-horizontal" name="loginForm" id="loginForm" action="/records/login" method="post" class="centered">
-					<legend>Please Log In:</legend>
-					<table>
-						<tr>
-							<div class="control-group col-xs-4 col-xs-offset-4">
-								<label class="control-label">Name: </label>
-								<div class="controls">
-									<input class="form-control" type="text" placeholder="Username" id="username" name="username">
-								</div>
-							</div>
-						</tr>
-						<tr>
-							<div class="control-group col-xs-4 col-xs-offset-4">
-								<label class="control-label">Pass: </label>
-								<div class="controls">
-									<input class="form-control" type="text" placeholder="Password" id="password" name="password">
-								</div>
-							</div>
-						</tr>
-						<tr>
-							<div class="col-xs-4 col-xs-offset-4">
-								</br>
-								<button type="submit" class="btn btn-primary" name="login" value="Log In">Log In</button>
-							</div>
-						</tr>
-					</table>
-				</form>
-			</div>
-			</br>
-			<form action="/records/newuser" role="form" name="register" id="register" method="get">
-				<button type="submit" class="btn btn-primary" name="register">Register</button>
 			</form>
-		</div>
-	</div>
+		% end
+		<br>	
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	</div>
     
 
 </body>

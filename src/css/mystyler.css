@@ -1,3 +1,23 @@
-#maincontainer{
+#maincontainer {
 	margin-top: 50px;
+}
+.login_cont {
+	margin: 0 auto;
+	width: 80%;
+}
+div .createwish {
+	margin-bottom: 80px;
+}
+div .mainbutton {
+	margin-bottom: 10px;
+}
+.media,
+.media-body {
+	overflow: visible;
+}
+.media:after,
+.media-body:after{
+	content: '';
+	clear: both;
+	display: block;
 }

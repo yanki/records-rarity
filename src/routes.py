@@ -4,6 +4,7 @@ import urlparse
 import oauth2 as auth
 from bottle import route, request, response, hook, \
     HTTPError, HTTPResponse, template, redirect, error
+# from request import args
 # from apiclient.discovery import build
 from util.settings import *
 from util.models import *
@@ -19,12 +20,17 @@ access_token_url = ACCESS_TOKEN
 global request_token
 global consumer
 
+user_details = {}
+wishlists = []
+wishlist_inuse = None
+search_items = []
+
 user_agent = 'records-rarity/1.0'
 
 
 @route('/', method='GET')
 def index_page():
-    return template('index.tpl', iterate="no", vinyls="WHAT")
+    return template('index.tpl', error="no")
 
 @route('/token')
 def get_token():
@@ -90,7 +96,7 @@ def finish_authenticate():
 
 @route('/newuser', method='GET')
 def new_user():
-    return template('newuser.tpl', made="no")
+    return template('newuser.tpl', info=None)
 
 @route('/insertuser', method='POST')
 def insert_user():
@@ -103,10 +109,32 @@ def insert_user():
     city = request.forms.get('city')
     state = request.forms.get('state')
     street = request.forms.get('street')
-    rarity = 0
+    rarity = 0.0
     InsertUser(name=name, username=username, password=password, picture=pict,
         email=email, zipcode=zipc, city=city, state=state, street=street, rarity=rarity)
-    return template('newuser.tpl', made="yes")
+    return template('index.tpl', error="success")
+
+@route('/updateuser', method='POST')
+def insert_user():
+    global user_details
+    password = request.forms.get('password')
+    name = request.forms.get('name')
+    pict = None
+    email = request.forms.get('email')
+    zipc = request.forms.get('zip')
+    city = request.forms.get('city')
+    state = request.forms.get('state')
+    street = request.forms.get('street')
+    user_details['password'] = password
+    user_details['name'] = name
+    user_details['email'] = email
+    user_details['zipcode'] = zipc
+    user_details['city'] = city
+    user_details['state'] = state
+    user_details['street'] = street
+    UpdateUser(name=name, username=None, password=password, picture=pict,
+        email=email, zipcode=zipc, city=city, state=state, street=street)
+    return template('homepage.tpl', details=user_details, contents=None, type="update")
 
 @route('/newwishlist', method='GET')
 def new_wishlist():
@@ -118,3 +146,132 @@ def insert_wishlist():
     wishlist = request.forms.get('wishlist')
     InsertWishlist(username=username, wishlist=wishlist)
     return template('newwishlist.tpl', made="yes")
+
+@route('/login', method='POST')
+def login():
+    global user_details
+
+    username = request.forms.get('username')
+    password = request.forms.get('password')
+    details = getUser(username=username, password=password)
+    if details is False:
+        return template('index.tpl', error="yes")
+    else:
+        user_details = details
+        return template('homepage.tpl', details=user_details, contents=None)
+
+@route('/login', method='GET')
+def reLogin():
+    global user_details
+
+    if len(user_details) < 1:
+        return template('index.tpl', error="yes")
+    else:
+        return template('homepage.tpl', details=user_details, contents=None)
+
+@route('/owned', method='GET')
+def records():
+    global user_details
+
+    records = getRecords(username=user_details['username'])
+    return template('homepage.tpl', details=user_details, contents=[records, None, None], type="records")
+
+@route('/wishlists', method='GET')
+def wishlists():
+    global user_details
+    global wishlists
+
+    wishlists = getWishlists(username=user_details['username'])
+    return template('homepage.tpl', details=user_details, contents=[wishlists, None, None], type="wishlists")
+
+@route('/newwish', method="POST")
+def makewish():
+    global user_details
+    global wishlists
+    wish = request.forms.get('wish')
+    InsertWishlist(username=user_details['username'], wishlist=wish)
+    wishlists.append([(wish,)])
+    return template('homepage.tpl', details=user_details, contents=[wishlists, None, None], type="wishlists")
+
+@route('/getwish', method="POST")
+def getwish():
+    global user_details
+    global wishlists
+    global wishlist_inuse
+
+    wishlist = request.forms.get('wishname')
+    wishes = getWishes(wishlist=wishlist, username=user_details['username'])
+    contents = [wishlists, wishes, wishlist]
+    wishlist_inuse = wishlist
+    return template('homepage.tpl', details=user_details, contents=contents, type="wishlists")
+
+@route('/findowners', method="POST")
+def findowners():
+    global user_details
+
+    record = request.forms.get('albumname')
+    owners = getOwners(album=record, username=user_details['username'])
+    contents = [owners, record]
+    return template('homepage.tpl', details=user_details, contents=contents, type="owners")
+
+@route('/deleterecord', method="POST")
+def deleteRecord():
+    o_id = request.forms.get('delete')
+    deleteEntry(value=o_id, table="owned_vinyl", attr="o_id", type="record")
+    records = getRecords(username=user_details['username'])
+    return template('homepage.tpl', details=user_details, contents=[records, True, None], type="records")
+
+@route('/deletewish', method="POST")
+def deleteWish():
+    global wishlist_inuse
+    global user_details
+    global wishlists
+
+    v_id = request.forms.get('delete')
+    deleteEntry(value=v_id, table="belongs_to_wishlist", attr="v_id", username=user_details['username'], title=wishlist_inuse, type="wish")
+    wishes = getWishes(wishlist=wishlist_inuse, username=user_details['username'])
+    contents = [wishlists, wishes, wishlist_inuse]
+    return template('homepage.tpl', details=user_details, contents=contents, type="wishlists")
+
+@route('/removewishlist', method="POST")
+def removeWishlist():
+    global user_details
+    global wishlists
+
+    title = request.forms.get('wishname')
+    deleteEntry(value=title, table="wishlist", attr="title", username=user_details['username'], type='list')
+    wishlists = getWishlists(username=user_details['username'])
+    return template('homepage.tpl', details=user_details, contents=[wishlists, None, None], type="wishlists")
+
+
+@route('/editinfo', method="GET")
+def editInfo():
+    global user_details
+    return template('newuser.tpl', info=user_details)
+
+@route('/search', method="POST")
+def search():
+    global search_items
+    items = (request.forms.get('items')).split(' ')
+    search_items = items
+    print search_items
+    results = SearchResults(items=items)
+    return template('homepage.tpl', details=user_details, contents=[results, "Search results for " + ' '.join(items), None], type="search")
+
+@route('/ownrecord', method="POST")
+def addRecord():
+    global user_details
+    global search_items
+    print search_items
+    kind = request.forms.get('type')
+    v_id = request.forms.get('v_id')
+    if kind == "details":
+        return template('add.tpl', type="own", v_id=v_id)
+    elif kind == "add":
+        quality = request.forms.get('quality')
+        price = request.forms.get('price')
+        trade = request.forms.get('trade')
+        sell = request.forms.get('sell')
+        AddRecord(username=user_details['username'], v_id=v_id, quality=quality, price=price, trade=trade, sell=sell)
+        results = SearchResults(items=search_items)
+        return template('homepage.tpl', details=user_details, contents=[results, "Search results for " + ' '.join(search_items), None], type="search")

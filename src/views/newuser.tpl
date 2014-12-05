@@ -53,23 +53,28 @@
 	</div>
 	<div class="container" id="maincontainer">
 		<hr />
-		<table>
-			% if made is "yes":
-				<tr>New User Created!</tr>
+		<ol class="breadcrumb">
+			<li><a href="/records/login">Home</a></li>
+			% if info is None:
+				<li>New User</li>
+			% else:
+				<li>Edit User</li>
 			% end
+		</ol>
+		% if info is None:
 			<form action="/records/insertuser" method="post">
 				<div class="form-group">
 					<label>Full Name:</label>
-					<input type = "text" class="form-control" id="name" name="name">
+					<input type = "text" class="form-control" id="name" name="name" required>
 					<br>
 					<label>UserName:</label>
-					<input type = "text" class="form-control" id="username" name="username">
+					<input type = "text" class="form-control" id="username" name="username" required>
 					<br>
 					<label>Password:</label>
-					<input type = "text" class="form-control" id="password" name="password">
+					<input type = "text" class="form-control" id="password" name="password" required>
 					<br>
 					<label>E-Mail:</label>
-					<input type = "text" class="form-control" id="email" name="email">
+					<input type = "text" class="form-control" id="email" name="email" required>
 					<br>
 					<label>Zipcode:</label>
 					<input type = "text" class="form-control" id="zip" name="zip">
@@ -86,9 +91,40 @@
 					<button type="submit" class="btn">Submit</button>
 				</div>
 			</form>
-			<br>	
-			
-		</table>
+		% end
+		% if info is not None:
+			<form action="/records/updateuser" method="post">
+				<div class="form-group">
+					<label>Full Name:</label>
+					<input type = "text" class="form-control" id="name" name="name" value="{{info['name']}}">
+					<br>
+					<label>UserName:</label>
+					<input type = "text" class="form-control" id="username" name="username" value="{{info['username']}}" readonly>
+					<br>
+					<label>Password:</label>
+					<input type = "text" class="form-control" id="password" name="password" value="{{info['password']}}">
+					<br>
+					<label>E-Mail:</label>
+					<input type = "text" class="form-control" id="email" name="email" value="{{info['email']}}">
+					<br>
+					<label>Zipcode:</label>
+					<input type = "text" class="form-control" id="zip" name="zip" value="{{info['zipcode']}}">
+					<br>
+					<label>Street:</label>
+					<input type = "text" class="form-control" id="street" name="street" value="{{info['street']}}">
+					<br>
+					<label>City:</label>
+					<input type = "text" class="form-control" id="city" name="city" value="{{info['city']}}">
+					<br>
+					<label>State:</label>
+					<input type = "text" class="form-control" id="state" name="state" value="{{info['state']}}">
+					<br>
+					<button type="submit" class="btn">Submit</button>
+				</div>
+			</form>
+		% end
+		<br>	
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	</div>
