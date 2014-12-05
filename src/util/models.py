@@ -57,6 +57,7 @@ def InsertWishlist(**args):
     cursor.close()
     cnx.close()
 
+<<<<<<< HEAD
 def getUser(**args):
     cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
             host=DATABASE_LOCATION, database=DATABASE_NAME)
@@ -200,3 +201,42 @@ def AddRecord(**args):
     cursor.close()
     cnx.close()
     return True
+=======
+def SearchRecords(**args):
+    cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
+            host=DATABASE_LOCATION, database=DATABASE_NAME)
+    cursor = cnx.cursor()
+
+    search_string = args['search_field'] #change to whatever the form is
+    search_result = set()
+
+    for s in search_string.split():
+        query = "SELECT DISTINCT artist,album,genre,year FROM records WHERE\
+ artist LIKE '%" + s + "%' OR album LIKE '%" + s + "%'"
+        cursor.execute(query)
+        data = cursor.fetchall()
+        for d in data:
+            search_result.add(d) 
+
+    #do something with search_result
+
+    cursor.close()
+    cnx.close()
+
+def GenerateRarity(**args):
+    cnx = mysql.connector.connect(user=DATABASE_USER, password=DATABASE_PASS,
+            host=DATABASE_LOCATION, database=DATABASE_NAME)
+    cursor = cnx.cursor()
+
+    query = "SELECT AVG(records.rarity) FROM records,owned_vinyl,described_by WHERE owned_vinyl.username = '%s' AND owned_vinyl.o_id = described_by.o_id AND records.v_id = described_by.v_id;" % (args['username'])
+    cursor.execute(query)
+    avg = cursor.fetchall()[0][0]
+    
+    update = "UPDATE users SET rarity = %s WHERE username = '%s';" % (avg, args['username'])
+    cursor.execute(update)
+    cnx.commit()
+
+    cursor.close()
+    cnx.close()
+
+>>>>>>> e0d3a4d605dcfef4a56ce2143761faed1d31aced

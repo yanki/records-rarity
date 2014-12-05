@@ -1,0 +1,17 @@
+after you adjust the .connect() function call in each one,
+
+RUN IN THIS ORDER
+
+
+insertRandUsers.py
+insertRandVinyls.py
+connectUsersOwned.py
+connectUsersWish.py
+
+
+if you need to give the records in the database a rarity
+
+giveRecordsRarity.py
+
+and the search, user rarity functions are in the models.py
+and should work without any modifications.
